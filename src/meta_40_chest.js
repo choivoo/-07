@@ -98,7 +98,7 @@ const Legend = {
     const rot = h('div', { class: 'abs', style: 'z-index:7;left:170px;top:250px;width:200px' }, cardImg(id)); st.append(rot); const nm = h('div', { class: 'abs ts rainbow', style: 'z-index:7;left:0;right:0;top:620px;text-align:center;font-size:34px;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none;filter:drop-shadow(0 3px 0 #14101c)' }, '전설 카드!'); st.append(nm);
     rot.animate([{ transform: 'scale(.2) rotateY(0deg)', opacity: 0 }, { transform: 'scale(1.3) rotateY(720deg)', opacity: 1, offset: .7 }, { transform: 'scale(1.15) rotateY(720deg)', opacity: 1 }], { duration: 2200, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' });
     await sleep(2300); const h2 = h('div', { class: 'abs ts blink', style: 'z-index:7;left:0;right:0;bottom:90px;text-align:center;font-size:22px' }, '탭하여 계속'); st.append(h2);
-    await new Promise(r => { const f = e => { e.stopPropagation(); ov.removeEventListener('pointerdown', f); r(); }; ov.addEventListener('pointerdown', f); });
+    await new Promise(r => { const f = e => { e.stopPropagation(); st.removeEventListener('pointerdown', f); r(); }; st.addEventListener('pointerdown', f); });
     ov.animate([{ opacity: .92 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }); [ring, rot, nm, h2].forEach(e => { e.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }); }); await sleep(320); [ov, ring, rot, nm, h2].forEach(e => e.remove());
   }
 };

@@ -24,7 +24,7 @@ const Loading = {
     return el;
   },
   async run(done) {
-    SM.go('loading'); const R = this.runner.getContext('2d'), fast = S().set.fast, F = fast ? 0.08 : Math.max(0.05, CONFIG.LOADING_SPEED);
+    SM.go('loading'); const R = this.runner.getContext('2d'), fast = S().set.fast, qs = parseFloat(new URLSearchParams(location.search).get('speed')), F = fast ? 0.08 : Math.max(0.05, qs > 0 ? qs : CONFIG.LOADING_SPEED);
     let tipI = ri(0, CONFIG.TIPS.length - 1); this.tip.textContent = '팁: ' + CONFIG.TIPS[tipI];
     const tipT = setInterval(() => { tipI = (tipI + 1) % CONFIG.TIPS.length; this.tip.textContent = '팁: ' + CONFIG.TIPS[tipI]; }, 4000);
     let prog = 0, target = 0, hold = 0, last = performance.now(), run = true;
