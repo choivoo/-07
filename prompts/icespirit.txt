@@ -1,0 +1,36 @@
+========================================
+[아이스스피릿] 스프라이트 시트 프롬프트 (icespirit)
+========================================
+- 이미지 2장을 각각 생성합니다: (1) 걷기 시트  (2) 공격 시트
+- 각 시트: 6열 x 2행, 1536x512 (한 칸 256x256)
+- 윗줄 = 아군 쪽(화면 아래 방향, 정면) / 아랫줄 = 적군 쪽(화면 위 방향, 뒷모습)
+- 배경은 마젠타(#FF00FF) 단색 -> 나중에 투명으로 변환
+- 저장 이름: icespirit_walk.png, icespirit_attack.png
+
+----------------------------------------
+PROMPT 1 / 2 : 걷기 (WALK)  -> icespirit_walk.png
+----------------------------------------
+Game sprite sheet, 6 columns x 2 rows, 12 frames total, on a perfectly flat solid magenta (#FF00FF) background, no gradients, no shadows outside the character, no text, no grid lines, no frame borders.
+Canvas 1536x512, exactly 6 equal columns and 2 equal rows, every cell exactly 256x256, character centered in each cell, feet on the same baseline in every cell, same scale in every cell.
+
+Character: small round snowball-like spirit with a huge open smiling mouth, spiky ice crystals around its body, light blue and white
+
+Top row (6 frames): the character moves toward the camera / down the screen, FRONT view (facing the viewer), smooth loopable cycle.
+Bottom row (6 frames): the character moves away from the camera / up the screen, BACK view (seen from behind), smooth loopable cycle.
+Bouncy hopping / floating movement, the crystals jiggle.
+
+Style: bright cartoon mobile-game character, 3D-rendered look, thick dark outline, saturated colors, soft top-left lighting, consistent proportions and colors across all 12 frames. Same character design in every frame (no changes in outfit, color, size).
+
+----------------------------------------
+PROMPT 2 / 2 : 공격 (ATTACK) -> icespirit_attack.png
+----------------------------------------
+Game sprite sheet, 6 columns x 2 rows, 12 frames total, on a perfectly flat solid magenta (#FF00FF) background, no gradients, no shadows outside the character, no text, no grid lines, no frame borders.
+Canvas 1536x512, exactly 6 equal columns and 2 equal rows, every cell exactly 256x256, character centered in each cell, feet on the same baseline in every cell, same scale in every cell.
+
+Character: small round snowball-like spirit with a huge open smiling mouth, spiky ice crystals around its body, light blue and white
+
+Top row (6 frames): the character performs its ATTACK animation facing the camera / down the screen, FRONT view: Curls up, then bursts into a freezing explosion ring of ice shards and snowflakes (the body disappears in the last frames).
+Bottom row (6 frames): the same ATTACK animation seen from behind, BACK view (attacking away from the camera / up the screen).
+Frame order in each row: 1 anticipation, 2 wind-up, 3 strike (peak), 4 impact, 5 follow-through, 6 recovery (returns to the neutral pose so the animation can loop).
+
+Style: bright cartoon mobile-game character, 3D-rendered look, thick dark outline, saturated colors, soft top-left lighting, consistent proportions and colors across all 12 frames. Same character design in every frame (no changes in outfit, color, size).
