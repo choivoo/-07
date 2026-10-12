@@ -1,0 +1,33 @@
+========================================
+호그 사이클 로얄 - 제미나이 Lyria BGM 프롬프트
+========================================
+- Lyria는 보통 30초 안팎의 짧은 클립이 나옴(버전에 따라 다름). 반복 재생 기준으로 요청.
+- 가사/스타일 칸 구분 없이 아래 문장을 그대로 붙여넣기.
+- MP3로 저장해서 assets/audio/ 에 아래 파일명으로 업로드.
+- 전투곡과 2배속곡은 같은 조(D minor)로 요청해야 전환이 자연스럽다.
+
+[1] bgm_menu.mp3
+An instrumental theme for a cartoon medieval fantasy mobile game menu: playful and heroic, bright brass fanfare, pizzicato strings and a light marching snare. 100 BPM, D minor. Seamless loop, no vocals.
+
+[2] bgm_battle.mp3
+Energetic instrumental orchestral battle music for a mobile strategy game: driving taiko and snare, staccato strings and heroic brass motifs, cartoon fantasy mood. 120 BPM, D minor. Steady groove that loops seamlessly, no big ending, no vocals.
+
+[3] bgm_battle_x2.mp3  (마지막 1분 / 엘릭서 2배속)
+A faster, more urgent version of an orchestral battle theme: urgent staccato strings, pounding taiko and rising brass, building tension and excitement, cartoon fantasy game. 144 BPM, D minor. Seamless loop, no vocals.
+
+[4] bgm_overtime.mp3  (연장전)
+Dramatic sudden-death battle music: dark heroic orchestra with choir "ah" pads and relentless drums, ticking tension, cartoon fantasy game. 150 BPM, D minor. Seamless loop, no vocals.
+
+[5] bgm_win.mp3  (승리, 약 8초)
+A very short triumphant victory jingle, about 8 seconds: bright brass fanfare with cheerful strings and glockenspiel, cartoon fantasy game, ending on a clear final chord. No vocals.
+
+[6] bgm_lose.mp3  (패배, 약 8초)
+A very short sad defeat jingle, about 8 seconds: descending muted brass and minor strings with soft timpani, cartoon fantasy game, ending on a gentle final chord. No vocals.
+
+[Negative prompt - 입력 칸이 있을 때만]
+vocals, lyrics, rap, dubstep, heavy metal, distorted guitar, long silence, fade out
+
+팁
+- 끝이 끊기면 오디오 편집기에서 끝 1~2초를 앞과 겹쳐 페이드 처리해 반복을 매끄럽게 한다.
+- 승리/패배는 길게 나오면 8초 안팎으로 자른다.
+- 프롬프트에 원작 게임/가수 이름을 쓰지 말 것.
