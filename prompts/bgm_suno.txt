@@ -1,0 +1,37 @@
+========================================
+호그 사이클 로얄 - 수노(Suno) BGM 프롬프트
+========================================
+사용법
+1) suno.com -> Create -> Custom 모드
+2) Instrumental(가사 없음) 켜기 (없으면 Lyrics 칸에 [Instrumental] 입력)
+3) Style of Music 칸에 아래 프롬프트 붙여넣기 (칸이 짧으면 앞 2~3문장만)
+4) Exclude styles 칸이 있으면 "공통 제외" 붙여넣기
+5) 마음에 드는 곡을 고르고 MP3 다운로드 -> assets/audio/ 에 아래 파일명으로 저장
+(수노 메뉴 이름은 버전에 따라 다를 수 있음)
+
+[1] bgm_menu.mp3  - 시작 화면 (1~2분, 100 BPM)
+Epic medieval fantasy orchestral theme, playful and heroic, bright brass fanfare, pizzicato strings, light snare march, 100 BPM, D minor, cartoon mobile game menu music, loopable, instrumental
+
+[2] bgm_battle.mp3 - 전투 (2분, 120 BPM, 반복 재생)
+Energetic orchestral battle music for a mobile strategy game, driving taiko and snare, staccato strings, heroic brass motifs, cartoon fantasy, 120 BPM, D minor, steady loop, no big ending, instrumental
+
+[3] bgm_battle_x2.mp3 - 마지막 1분 / 엘릭서 2배속 (1~2분, 144 BPM)
+Intense faster orchestral battle music, urgent staccato strings, pounding taiko, rising brass, tension and excitement, cartoon fantasy game, 144 BPM, D minor, loopable, instrumental
+
+[4] bgm_overtime.mp3 - 연장전 (1분, 150 BPM)
+Dramatic sudden-death battle theme, dark heroic orchestra, choir "ah" pads, relentless drums, ticking tension, cartoon fantasy game, 150 BPM, D minor, loopable, instrumental
+
+[5] bgm_win.mp3 - 승리 (5~10초)
+Short triumphant victory jingle, bright brass fanfare, cheerful strings and glockenspiel, cartoon fantasy game, 8 seconds, clear final chord, instrumental
+
+[6] bgm_lose.mp3 - 패배 (5~10초)
+Short sad defeat jingle, descending muted brass and minor strings, soft timpani, cartoon fantasy game, 8 seconds, gentle final chord, instrumental
+
+[공통 제외 (Exclude styles)]
+vocals, lyrics, rap, electronic dubstep, heavy metal, distorted guitar, long intro, long outro, fade out
+
+팁
+- 전투곡과 2배속곡은 같은 조(D minor)로 만들어야 전환이 자연스럽다.
+- 끝이 끊기면 오디오 편집기에서 끝 2초를 앞과 겹쳐 페이드 처리해 반복 재생을 매끄럽게 한다.
+- 프롬프트에 원작 게임/가수 이름을 쓰지 말 것.
+- 수노 무료 요금제 곡은 비상업적 용도만 가능. 128kbps MP3로 줄이면 2분 약 2MB.
