@@ -61,7 +61,7 @@ const CONFIG = {
   T: 24, AX: 54, AY: 44,     // 타일 크기, 아레나 좌상단 오프셋
   COLS: 18, ROWS: 32,
   river: { top: 15, bot: 17 },
-  bridges: [3.5, 14.5], bridgeW: 3,
+  bridges: [3.5, 14.5], bridgeW: 2.2,
   matchTime: 180, doubleAt: 60, overtime: 60,
   elixirMax: 10, elixirStart: 5, elixirBase: 2.8,
   deployTime: 1.0, level: 11, slowMul: 0.65,
@@ -271,41 +271,52 @@ function drawBrickLines(c, x0, x1, y0, y1, step) {
     for (let x = x0 + (i % 2 ? 10 : 20); x < x1; x += 20) { c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + step); c.stroke(); } }
   c.restore();
 }
+function drawLadder(c, x, y0, y1) {
+  ln(c, x - 6, y0, x - 6, y1, 3, '#9a6a3a'); ln(c, x + 6, y0, x + 6, y1, 3, '#9a6a3a');
+  for (let y = y0 + 6; y < y1; y += 9) ln(c, x - 6, y, x + 6, y, 2.5, '#b9824a');
+}
 function drawPrincess(c, o) {
   L(c);
-  rr(c, -46, -28, 92, 28, 6, '#8e98aa');
-  poly(c, [[-35, -28], [-30, -100], [30, -100], [35, -28]], '#b9c3d3');
-  drawBrickLines(c, -33, 33, -98, -30, 14);
-  rr(c, -12, -34, 24, 34, 12, '#6b4a2e'); ln(c, 0, -34, 0, -2, 2, '#14101c');
-  rr(c, -42, -118, 84, 22, 5, o.col);
-  for (let i = 0; i < 4; i++) rr(c, -42 + i * 23, -130, 14, 14, 3, o.col);
-  rr(c, -5, -108, 10, 3, 1, o.dk);
+  rr(c, -44, -32, 88, 32, 8, '#a9a398');
+  poly(c, [[-36, -32], [-31, -92], [31, -92], [36, -32]], '#d2ccbf');
+  poly(c, [[-36, -32], [-31, -92], [-18, -92], [-20, -32]], 'rgba(255,255,255,.28)');
+  drawBrickLines(c, -33, 33, -90, -34, 13);
+  drawLadder(c, 46, -78, -2);
+  rr(c, -11, -32, 22, 32, 11, '#6b4a2e');
+  rr(c, -42, -108, 84, 20, 6, '#8f8a80');
+  rr(c, -42, -108, 84, 9, 5, o.col);
+  for (let i = 0; i < 4; i++) rr(c, -42 + i * 23, -122, 14, 15, 3, '#c4beb2');
+  rr(c, -30, -112, 60, 6, 2, o.dk);
   const pull = o.atk > 0 ? Math.sin(o.atk * Math.PI) : 0;
-  ell(c, 0, -140, 10, 10, '#f0b98d'); c.beginPath(); c.arc(0, -144, 11, Math.PI, 0); c.fillStyle = o.dk; c.fill(); c.stroke();
-  c.beginPath(); c.arc(14, -138, 14, -1.3, 1.3); c.lineWidth = 4; c.stroke();
-  c.lineWidth = 1.8; c.beginPath(); c.moveTo(14 + Math.cos(-1.3) * 14, -138 + Math.sin(-1.3) * 14); c.lineTo(14 - pull * 14, -138); c.lineTo(14 + Math.cos(1.3) * 14, -138 + Math.sin(1.3) * 14); c.stroke(); L(c);
-  ln(c, 36, -100, 36, -160, 3, '#6b4a2e'); poly(c, [[36, -160], [58, -152], [36, -144]], o.col);
+  rr(c, -12, -138, 24, 22, 8, '#e9c9a0');
+  c.beginPath(); c.arc(0, -134, 13, Math.PI, 0); c.closePath(); c.fillStyle = o.col; c.fill(); c.stroke();
+  ell(c, 5, -127, 2.4, 3, '#14101c');
+  c.beginPath(); c.arc(16, -126, 15, -1.3, 1.3); c.lineWidth = 4; c.stroke();
+  c.lineWidth = 1.8; c.beginPath(); c.moveTo(16 + Math.cos(-1.3) * 15, -126 + Math.sin(-1.3) * 15); c.lineTo(16 - pull * 14, -126); c.lineTo(16 + Math.cos(1.3) * 15, -126 + Math.sin(1.3) * 15); c.stroke(); L(c);
 }
 function drawKing(c, o) {
   L(c);
-  rr(c, -66, -26, 132, 26, 6, '#8e98aa');
-  rr(c, -62, -88, 34, 62, 5, '#a9b3c4'); rr(c, 28, -88, 34, 62, 5, '#a9b3c4');
-  poly(c, [[-66, -88], [-45, -120], [-24, -88]], o.col); poly(c, [[24, -88], [45, -120], [66, -88]], o.col);
-  drawBrickLines(c, -60, -30, -86, -28, 13); drawBrickLines(c, 30, 60, -86, -28, 13);
-  rr(c, -36, -110, 72, 84, 6, '#b9c3d3');
-  drawBrickLines(c, -34, 34, -108, -28, 14);
-  rr(c, -40, -128, 80, 22, 5, o.col);
-  for (let i = 0; i < 4; i++) rr(c, -40 + i * 21.5, -140, 14, 14, 3, o.col);
-  rr(c, -15, -44, 30, 44, 15, '#6b4a2e'); ln(c, 0, -44, 0, -2, 2, '#14101c');
-  rr(c, -22, -100, 44, 28, 14, '#3a3250');
-  ell(c, 0, -84, 14, 14, '#f0b98d');
-  ell(c, 0, -74, 12, 7, '#f4f1e6');
-  rr(c, -12, -100, 24, 10, 4, '#ffd23a');
-  poly(c, [[-12, -98], [-12, -112], [-6, -104], [0, -116], [6, -104], [12, -112], [12, -98]], '#ffd23a');
-  if (o.active) { ell(c, -5, -85, 2.6, 3.2, '#14101c'); ell(c, 5, -85, 2.6, 3.2, '#14101c'); ln(c, -9, -91, -2, -89, 2.4, '#14101c'); ln(c, 9, -91, 2, -89, 2.4, '#14101c'); }
-  else { ln(c, -8, -85, -2, -85, 2.6, '#14101c'); ln(c, 2, -85, 8, -85, 2.6, '#14101c');
-    const zz = (Math.sin(o.t * 2) + 1) * 4; txt(c, 'Z', 30, -128 - zz, 20, '#fff'); txt(c, 'z', 44, -146 - zz, 14, '#fff'); }
-  ln(c, 52, -90, 52, -160, 3, '#6b4a2e'); poly(c, [[52, -160], [76, -152], [52, -144]], o.col);
+  rr(c, -72, -26, 144, 26, 8, '#a9a398');
+  for (const sgn of [-1, 1]) {
+    const x = sgn * 52;
+    rr(c, x - 22, -92, 44, 68, 6, '#cfc9bc'); drawBrickLines(c, x - 20, x + 20, -90, -28, 13);
+    poly(c, [[x - 28, -92], [x, -122], [x + 28, -92]], o.col);
+    rr(c, x - 8, -70, 16, 22, 8, '#4a3a2a');
+  }
+  rr(c, -40, -118, 80, 92, 7, '#d2ccbf');
+  poly(c, [[-40, -118], [-40, -26], [-24, -26], [-24, -118]], 'rgba(255,255,255,.25)');
+  drawBrickLines(c, -38, 38, -116, -28, 14);
+  rr(c, -46, -136, 92, 20, 6, o.col);
+  for (let i = 0; i < 4; i++) rr(c, -46 + i * 26, -150, 16, 15, 3, '#c4beb2');
+  rr(c, -16, -46, 32, 46, 16, '#6b4a2e'); ln(c, 0, -46, 0, -2, 2, '#14101c');
+  poly(c, [[-26, -112], [-30, -76], [30, -76], [26, -112]], o.dk);
+  ell(c, 0, -88, 16, 15, '#f0b98d');
+  ell(c, 0, -76, 14, 8, '#f4f1e6');
+  poly(c, [[-14, -98], [-18, -122], [-8, -112], [0, -128], [8, -112], [18, -122], [14, -98]], '#ffd23a');
+  ell(c, 0, -98, 14, 4, '#ffb21a');
+  if (o.active) { ell(c, -5, -88, 2.6, 3.2, '#14101c'); ell(c, 5, -88, 2.6, 3.2, '#14101c'); ln(c, -9, -94, -2, -92, 2.4, '#14101c'); ln(c, 9, -94, 2, -92, 2.4, '#14101c'); }
+  else { ln(c, -8, -88, -2, -88, 2.6, '#14101c'); ln(c, 2, -88, 8, -88, 2.6, '#14101c');
+    const zz = (Math.sin(o.t * 2) + 1) * 4; txt(c, 'Z', 34, -140 - zz, 20, '#fff'); txt(c, 'z', 48, -158 - zz, 14, '#fff'); }
 }
 function drawRubble(c, o) {
   L(c);
@@ -812,37 +823,47 @@ class Renderer {
 
   /* ---------- 아레나 ---------- */
   drawBackdrop() {
-    const c = this.c, W = CONFIG.W, H = CONFIG.H;
-    c.fillStyle = '#2e5a2a'; c.fillRect(0, 0, W, H);
-    c.fillStyle = '#244a22';
-    for (let i = 0; i < 16; i++) { const y = 70 + i * 50; for (const x of [18, 522]) { c.beginPath(); c.arc(x + ((i * 7) % 3) * 4, y, 18 + (i % 3) * 3, 0, 6.3); c.fill(); c.lineWidth = 3; c.strokeStyle = '#14101c'; c.stroke(); } }
+    const c = this.c, W = CONFIG.W, H = CONFIG.H, T = CONFIG.T;
+    c.fillStyle = '#3d7a34'; c.fillRect(0, 0, W, H);
+    for (let i = 0; i < 15; i++) { const y = 56 + i * 56; for (const x of [14, 526]) {
+      const r = 15 + (i % 3) * 3; c.fillStyle = '#2f6a2c'; c.beginPath(); c.arc(x, y, r, 0, 6.3); c.fill(); c.lineWidth = 3; c.strokeStyle = '#14101c'; c.stroke();
+      c.fillStyle = '#4fa23e'; c.beginPath(); c.arc(x - 4, y - 5, r * .5, 0, 6.3); c.fill(); } }
+    const fx = sx(0) - 13, fw = 18 * T + 26, fy = CONFIG.AY - 12, fh = 32 * T + 24;
+    c.fillStyle = '#8a5a34'; c.fillRect(fx, fy, fw, fh);
+    c.strokeStyle = '#5a3a20'; c.lineWidth = 2;
+    for (let y = fy; y < fy + fh; y += 12) { c.beginPath(); c.moveTo(fx, y); c.lineTo(fx + 13, y); c.moveTo(fx + fw - 13, y); c.lineTo(fx + fw, y); c.stroke(); }
+    for (let x = fx; x < fx + fw; x += 12) { c.beginPath(); c.moveTo(x, fy); c.lineTo(x, fy + 12); c.stroke(); }
+    c.strokeStyle = '#14101c'; c.lineWidth = 4; c.strokeRect(fx, fy, fw, fh);
   }
   drawArena() {
     const c = this.c, T = CONFIG.T, R = CONFIG.river;
     for (let r = 0; r < CONFIG.ROWS; r++) for (let q = 0; q < CONFIG.COLS; q++) {
       if (r >= R.top && r < R.bot) continue;
-      c.fillStyle = (r + q) % 2 ? '#7fca4d' : '#72bd42'; c.fillRect(sx(q), sy(r), T + .5, T + .5);
+      c.fillStyle = (r + q) % 2 ? '#a6d862' : '#99cd56'; c.fillRect(sx(q), sy(r), T + .5, T + .5);
     }
-    c.fillStyle = 'rgba(255,60,60,.07)'; c.fillRect(sx(0), sy(0), 18 * T, R.top * T);
-    c.fillStyle = 'rgba(60,120,255,.07)'; c.fillRect(sx(0), sy(R.bot), 18 * T, (32 - R.bot) * T);
+    c.fillStyle = 'rgba(214,196,126,.55)';
+    const strip = (x0, y0, x1, y1) => c.fillRect(sx(x0), sy(y0), (x1 - x0) * T, (y1 - y0) * T);
+    for (const lx of CONFIG.bridges) { strip(lx - .7, 6.5, lx + .7, R.top); strip(lx - .7, R.bot, lx + .7, 25.5); }
+    strip(2.8, 5.8, 15.2, 7.2); strip(8.3, 2.6, 9.7, 6.5); strip(2.8, 24.8, 15.2, 26.2); strip(8.3, 25.5, 9.7, 29.4);
     const y0 = sy(R.top), y1 = sy(R.bot), a = this.g.anim;
-    const gr = c.createLinearGradient(0, y0, 0, y1); gr.addColorStop(0, '#62cdf4'); gr.addColorStop(1, '#3c9fdc');
+    const gr = c.createLinearGradient(0, y0, 0, y1); gr.addColorStop(0, '#4fe3d2'); gr.addColorStop(1, '#2cbdb4');
     c.fillStyle = gr; c.fillRect(sx(0), y0, 18 * T, y1 - y0);
-    c.save(); c.beginPath(); c.rect(sx(0), y0, 18 * T, y1 - y0); c.clip(); c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 2.2; c.lineCap = 'round';
+    c.save(); c.beginPath(); c.rect(sx(0), y0, 18 * T, y1 - y0); c.clip(); c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = 2.2; c.lineCap = 'round';
     for (let j = 0; j < 3; j++) for (let i = 0; i < 14; i++) {
       const dir = j % 2 ? -1 : 1, wx = sx(0) + ((i * 37 + a * 26 * dir + j * 17) % (18 * T + 30) + 18 * T + 30) % (18 * T + 30) - 15, wy = y0 + 9 + j * 15 + Math.sin(a * 2.2 + i) * 2.5;
       c.beginPath(); c.moveTo(wx, wy); c.quadraticCurveTo(wx + 8, wy - 5, wx + 16, wy); c.stroke();
     }
     c.restore();
     c.strokeStyle = '#14101c'; c.lineWidth = 3; c.beginPath(); c.moveTo(sx(0), y0); c.lineTo(sx(18), y0); c.moveTo(sx(0), y1); c.lineTo(sx(18), y1); c.stroke();
-    c.fillStyle = '#e8d49a'; c.fillRect(sx(0), y0 - 4, 18 * T, 4); c.fillRect(sx(0), y1, 18 * T, 4);
     for (const bx of CONFIG.bridges) {
-      const x0 = sx(bx - CONFIG.bridgeW / 2), w = CONFIG.bridgeW * T;
-      c.fillStyle = '#b9824a'; c.fillRect(x0, y0 - 6, w, y1 - y0 + 12);
-      c.strokeStyle = '#8a5a2c'; c.lineWidth = 2; for (let y = y0 - 6; y < y1 + 6; y += 8) { c.beginPath(); c.moveTo(x0, y); c.lineTo(x0 + w, y); c.stroke(); }
-      c.strokeStyle = '#14101c'; c.lineWidth = 3.5; c.strokeRect(x0, y0 - 6, w, y1 - y0 + 12);
-      c.fillStyle = '#7a4a22'; c.fillRect(x0 - 3, y0 - 6, 6, y1 - y0 + 12); c.fillRect(x0 + w - 3, y0 - 6, 6, y1 - y0 + 12);
-      c.strokeRect(x0 - 3, y0 - 6, 6, y1 - y0 + 12); c.strokeRect(x0 + w - 3, y0 - 6, 6, y1 - y0 + 12);
+      const w = CONFIG.bridgeW * T, x0 = sx(bx) - w / 2;
+      c.fillStyle = '#dcab62'; c.fillRect(x0, y0 - 5, w, y1 - y0 + 10);
+      c.strokeStyle = '#a8763a'; c.lineWidth = 2; for (let y = y0 - 5; y < y1 + 5; y += 8) { c.beginPath(); c.moveTo(x0, y); c.lineTo(x0 + w, y); c.stroke(); }
+      c.strokeStyle = '#14101c'; c.lineWidth = 3; c.strokeRect(x0, y0 - 5, w, y1 - y0 + 10);
+    }
+    for (const bxx of [0.5, 17.5]) for (const byy of [R.top - 0.2, R.bot + 0.2]) {
+      const x = sx(bxx), y = sy(byy); c.fillStyle = '#3f9a36'; c.beginPath(); c.arc(x, y, 12, 0, 6.3); c.fill(); c.lineWidth = 3; c.strokeStyle = '#14101c'; c.stroke();
+      c.fillStyle = '#62bb4a'; c.beginPath(); c.arc(x - 3, y - 4, 6, 0, 6.3); c.fill();
     }
     c.strokeStyle = '#14101c'; c.lineWidth = 4; c.strokeRect(sx(0), sy(0), 18 * T, 32 * T);
   }
