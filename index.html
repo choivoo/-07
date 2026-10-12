@@ -182,7 +182,7 @@ function drawMusketeer(c, o) {
   rr(c, -4, -74, 8, 44, 2, '#f4f1e6');
   rr(c, -18, -46, 36, 8, 2, '#2b2b34');
   ell(c, 0, -88, 13, 13, '#f0b98d');
-  ell(c, 4, -83, 9, 3.5, '#5b3a22');
+  ell(c, -11, -84, 6, 9, '#a23fd0'); ell(c, 13, -84, 6, 9, '#a23fd0');
   c.beginPath(); c.arc(0, -92, 16, Math.PI, 0); c.closePath(); c.fillStyle = '#8d96a3'; c.fill(); c.stroke();
   rr(c, -21, -94, 42, 7, 3, '#6c7480');
   poly(c, [[-4, -106], [-14, -128], [8, -112]], o.col);
@@ -354,6 +354,84 @@ const PORTRAIT_OVERRIDE = {
   }
 };
 
+
+/* =====================================================================
+   카드 초상화 (160x150 Canvas 직접 그리기) - 카드 UI의 큰 일러스트
+   새 카드는 PORTRAITS.id = c => {...} 로 추가 (없으면 스프라이트를 자동 사용)
+   ===================================================================== */
+function pBg(c, top, bot) { const g = c.createLinearGradient(0, 0, 0, 150); g.addColorStop(0, top); g.addColorStop(1, bot); c.fillStyle = g; c.fillRect(0, 0, 160, 150); }
+function pSparks(c, col, n, seed) { c.fillStyle = col; for (let i = 0; i < n; i++) { const a = Math.sin(seed + i * 12.9) * 43758.5; const x = (a - Math.floor(a)) * 160, b = Math.sin(seed + i * 78.2) * 24634.6, y = (b - Math.floor(b)) * 150; c.beginPath(); c.arc(x, y, 1.5 + (i % 3), 0, 6.3); c.fill(); } }
+const PORTRAITS = {
+  hog(c) {
+    pBg(c, '#6fb0ee', '#d4ecff'); c.fillStyle = '#7cc04a'; c.beginPath(); c.ellipse(130, 150, 70, 30, 0, 0, 6.3); c.fill(); L(c, 4);
+    ell(c, 80, 156, 62, 36, '#d9906a');
+    ell(c, 80, 74, 48, 52, '#e3a074');
+    poly(c, [[40, 44], [52, 12], [80, 2], [108, 12], [120, 44], [102, 36], [80, 30], [58, 36]], '#7a3a28');
+    poly(c, [[30, 72], [40, 122], [80, 142], [120, 122], [130, 72], [112, 98], [80, 106], [48, 98]], '#5a2e1c');
+    ell(c, 80, 90, 28, 7, '#5a2e1c');
+    ell(c, 80, 110, 26, 18, '#5a1010'); rr(c, 62, 96, 36, 9, 3, '#fff'); ell(c, 80, 122, 15, 8, '#e8607a');
+    ell(c, 100, 62, 10, 9, '#fff'); ell(c, 103, 63, 4.5, 4.5, '#5a8ac8'); ln(c, 90, 50, 112, 56, 4, '#5a2e1c');
+    ell(c, 58, 66, 7, 7, '#fff'); ell(c, 59, 67, 3.5, 3.5, '#5a8ac8');
+  },
+  musketeer(c) {
+    pBg(c, '#78aee8', '#cfe6ff'); L(c, 4);
+    ln(c, 6, 146, 78, 112, 12, '#6b4423');
+    ell(c, 82, 158, 66, 40, '#c0432a'); ell(c, 124, 130, 28, 20, '#b8bcc4'); rr(c, 40, 118, 50, 30, 10, '#4a62a8');
+    ell(c, 38, 86, 16, 22, '#a23fd0'); ell(c, 124, 86, 16, 22, '#a23fd0'); c.lineWidth = 3; c.beginPath(); c.arc(36, 86, 7, 0, 5); c.stroke(); c.beginPath(); c.arc(126, 86, 7, 0, 5); c.stroke(); L(c, 4);
+    ell(c, 80, 82, 34, 38, '#f0c0a0');
+    c.beginPath(); c.arc(80, 66, 46, Math.PI, 0); c.closePath(); c.fillStyle = '#aeb4bc'; c.fill(); c.stroke();
+    rr(c, 30, 62, 100, 11, 5, '#8d939b'); ln(c, 100, 26, 108, 0, 5, '#c0432a');
+    ell(c, 96, 86, 4.5, 6, '#14101c'); ell(c, 66, 86, 4.5, 6, '#14101c'); c.lineWidth = 3; c.beginPath(); c.arc(82, 104, 6, 0.3, 2.8); c.stroke();
+  },
+  icegolem(c) {
+    pBg(c, '#243e86', '#6aa6ee'); L(c, 4);
+    poly(c, [[30, 40], [24, 4], [52, 28]], '#cfeaff'); poly(c, [[110, 28], [140, 6], [132, 44]], '#cfeaff');
+    rr(c, 24, 26, 112, 108, 32, '#d8eeff'); poly(c, [[24, 60], [40, 30], [60, 26], [50, 70]], 'rgba(255,255,255,.55)');
+    poly(c, [[110, 30], [136, 60], [136, 110], [112, 80]], '#9cc8ee');
+    ell(c, 56, 68, 15, 11, '#0a2a5a'); ell(c, 108, 68, 15, 11, '#0a2a5a'); ell(c, 56, 68, 10, 7, '#7ff4ff'); ell(c, 108, 68, 10, 7, '#7ff4ff');
+    poly(c, [[80, 76], [88, 96], [72, 96]], '#6a9ccc');
+    rr(c, 44, 104, 72, 24, 8, '#5a8abc'); for (let i = 0; i < 4; i++) rr(c, 50 + i * 17, 104, 14, 14, 3, '#fff');
+  },
+  icespirit(c) {
+    pBg(c, '#1a2c5a', '#4c80c8'); L(c, 4);
+    const sp = [[-50, -20], [-46, 50], [48, -52], [60, 40], [-14, -68], [22, -66]];
+    for (const q of sp) { poly(c, [[80 + q[0] * .5, 76 + q[1] * .5], [80 + q[0] * 1.3 - 10, 76 + q[1] * 1.3 + 8], [80 + q[0] * 1.3 + 10, 76 + q[1] * 1.3 - 8]], '#bfe9ff'); }
+    ell(c, 80, 80, 58, 54, '#f4fbff'); ell(c, 56, 60, 10, 14, '#8fe0ff'); ell(c, 104, 60, 10, 14, '#8fe0ff');
+    ell(c, 80, 104, 38, 28, '#4a2a6a'); rr(c, 52, 84, 56, 12, 4, '#fff'); rr(c, 60, 112, 40, 10, 4, '#fff'); ell(c, 80, 118, 14, 7, '#e8607a');
+    pSparks(c, '#e8f8ff', 10, 3);
+  },
+  skeletons(c) {
+    pBg(c, '#28144c', '#6a46b8'); L(c, 4);
+    ell(c, 80, 146, 56, 30, '#4a3a2a');
+    ell(c, 80, 96, 42, 46, '#ece8d8'); rr(c, 56, 124, 48, 18, 6, '#ece8d8'); for (let i = 0; i < 4; i++) ln(c, 62 + i * 12, 126, 62 + i * 12, 140, 2, '#14101c');
+    ell(c, 62, 92, 15, 17, '#14101c'); ell(c, 98, 92, 15, 17, '#14101c'); ell(c, 62, 92, 8, 10, '#c060ff'); ell(c, 98, 92, 8, 10, '#c060ff');
+    poly(c, [[80, 104], [74, 118], [86, 118]], '#14101c');
+    ell(c, 80, 40, 58, 26, '#efe9e0'); ell(c, 26, 82, 17, 34, '#efe9e0'); ell(c, 134, 82, 17, 34, '#efe9e0');
+    ell(c, 80, 62, 46, 10, '#d8d2c6'); c.lineWidth = 2; for (let i = 0; i < 8; i++) { c.beginPath(); c.moveTo(34 + i * 13, 34); c.lineTo(36 + i * 13, 46); c.stroke(); }
+  },
+  cannon(c) {
+    pBg(c, '#4a3a96', '#a690e0'); pSparks(c, 'rgba(255,255,255,.5)', 8, 7); L(c, 4);
+    rr(c, 14, 116, 132, 40, 4, '#c08850'); ln(c, 14, 130, 146, 130, 2, '#8a5a2c'); ln(c, 14, 144, 146, 144, 2, '#8a5a2c');
+    ell(c, 80, 74, 62, 60, '#2e2040'); ell(c, 80, 74, 56, 54, '#8a4ad0'); ell(c, 80, 74, 44, 42, '#3a2a58'); ell(c, 80, 76, 34, 33, '#0a0612');
+    c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 4; c.beginPath(); c.arc(80, 74, 50, 3.6, 4.7); c.stroke(); L(c, 4);
+    poly(c, [[20, 52], [8, 40], [12, 64]], '#8a8f9a');
+  },
+  fireball(c) {
+    pBg(c, '#3a0f10', '#b04a1a'); L(c, 4);
+    poly(c, [[96, 62], [160, -6], [136, 80]], '#ff6a1a'); poly(c, [[80, 40], [150, 20], [120, 70]], '#ff9a2a');
+    ell(c, 70, 92, 54, 52, '#ff8a1a'); ell(c, 74, 96, 40, 38, '#ffc83a'); ell(c, 80, 100, 22, 20, '#fff3a8');
+    pSparks(c, '#ffd24a', 14, 5);
+  },
+  log(c) {
+    pBg(c, '#8cc4f0', '#dff0ff'); c.fillStyle = '#7cc04a'; c.fillRect(0, 108, 160, 42); L(c, 4);
+    c.fillStyle = '#7a5a3a'; for (let i = 0; i < 6; i++) { c.beginPath(); c.arc(20 + i * 24, 126 + (i % 2) * 10, 3, 0, 6.3); c.fill(); }
+    c.save(); c.translate(80, 66); c.rotate(-0.42);
+    for (const x of [-46, -8, 32]) { poly(c, [[x - 8, -22], [x, -44], [x + 8, -22]], '#d0d4da'); poly(c, [[x - 8, 22], [x, 44], [x + 8, 22]], '#d0d4da'); }
+    rr(c, -76, -26, 152, 52, 18, '#b87a42'); c.lineWidth = 2.5; c.strokeStyle = '#7a4a22';
+    for (let i = -60; i < 70; i += 20) { c.beginPath(); c.moveTo(i, -24); c.quadraticCurveTo(i + 8, 0, i, 24); c.stroke(); }
+    c.restore();
+  }
+};
 /* =====================================================================
    효과음 (WebAudio 합성)
    ===================================================================== */
@@ -809,7 +887,7 @@ class Renderer {
       this.bc.save(); this.bc.translate(128, 200); (PORTRAIT_OVERRIDE[id] || SPRITES[id])(this.bc, o); this.bc.restore();
       const cv = document.createElement('canvas'); cv.width = 160; cv.height = 150; const cc = cv.getContext('2d');
       const pz = cfg.pz || 1, sw = 160 / pz, sh = 150 / pz, cy = 200 + (cfg.pcy || -60);
-      cc.drawImage(this.buf, 128 - sw / 2, cy - sh / 2, sw, sh, 0, 0, 160, 150);
+      if (PORTRAITS[id]) { PORTRAITS[id](cc); } else cc.drawImage(this.buf, 128 - sw / 2, cy - sh / 2, sw, sh, 0, 0, 160, 150);
       this.portraits[id] = cv;
       const gv = document.createElement('canvas'); gv.width = 160; gv.height = 150; const gc = gv.getContext('2d'); gc.drawImage(cv, 0, 0);
       try {
@@ -1017,8 +1095,9 @@ class Renderer {
     rr(c, x, y, w, h, 12, bc);
     const g2 = c.createLinearGradient(x, y, x, y + h); g2.addColorStop(0, st.afford ? '#b8e6ff' : '#9aa6b0'); g2.addColorStop(1, st.afford ? '#6bb4ea' : '#5f6a74');
     L(c, 2.5); rr(c, x + 5, y + 5, w - 10, h - 10, 8, g2);
-    const pw = w * 0.82, ph = pw * 150 / 160, img = st.afford ? this.portraits[id] : this.portraitsGray[id];
-    c.drawImage(img, x + (w - pw) / 2, y + 8, pw, ph);
+    const img = st.afford ? this.portraits[id] : this.portraitsGray[id];
+    c.save(); rr(c, x + 5, y + 5, w - 10, h - 10, 8, null); c.clip(); c.drawImage(img, x + 5, y + 5, w - 10, h - 10); c.restore();
+    L(c, 2.5); rr(c, x + 5, y + 5, w - 10, h - 10, 8, null);
     const nh = 20; L(c, 2.5); rr(c, x + 5, y + h - 5 - nh, w - 10, nh, 6, 'rgba(30,20,50,.85)');
     txt(c, cfg.name, x + w / 2, y + h - 5 - nh / 2 + 1, w > 80 ? 13 : 9, '#fff');
     this.drawDrop(x + 16, y + 17, 1, cfg.cost, st.afford);
