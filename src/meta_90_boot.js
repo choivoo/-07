@@ -38,7 +38,7 @@ const Meta = {
     ctx = ctx || {}; const s = S(), deck = (ctx.deck || s.decks[s.deck]).slice(), levels = {}; CARDS.forEach(id => levels[id] = ctx.tutorial ? 1 : s.cards[id].lv);
     SM.hideAll(); this.showCanvas(true);
     const lvl = ctx.tutorial ? 1 : avgLevel();
-    const opts = Object.assign({ diff: s.set.diff, deck, levels, aiLevel: lvl, towerLv: lvl, rules: ctx.rules || {}, allowForfeit: !ctx.tutorial,
+    const opts = Object.assign({ arenaId: ctx.tutorial ? 1 : trophyArena(s.trophies).id, diff: s.set.diff, deck, levels, aiLevel: lvl, towerLv: lvl, rules: ctx.rules || {}, allowForfeit: !ctx.tutorial,
       onEvent: (t, d) => this.onEvent(t, d, ctx), onState: (n, d) => this.onState(n, d), onEnd: r => this.afterBattle(r, ctx) }, ctx.opts || {});
     game.onMute = () => { S().set.muted = !S().set.muted; Save.save(); this.applyMute(); };
     game.onForfeitRequest = () => { game.paused = true; const m = openModal({ title: '전투 포기', body: h('div', { style: 'text-align:center;font-size:18px;padding:10px 4px;line-height:1.4' }, '포기하면 패배로 처리됩니다.<br>정말 나갈까요?'), buttons: [{ text: '계속 싸우기', cls: 'g' }, { text: '포기', cls: 'r', fn: () => { game.paused = false; game.forfeit(); } }], onClose: () => { game.paused = false; } }); };

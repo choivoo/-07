@@ -1171,6 +1171,20 @@ class Arena {
    Renderer : 모든 그리기
    ===================================================================== */
 const UI = { cardW: 86, cardH: 104, cardX0: 88, cardGap: 8, cardY: 816, nextX: 14, nextY: 846, nextW: 54, nextH: 65, barY: 928, barH: 24 };
+
+/* =====================================================================
+   아레나별 전투 맵 테마 (코드로 색조/장식만 덧입힘. 다리·타워·강 위치는 공통)
+   grass/river: 'color' 블렌드 색, ga/ra: 세기, deco: 장식 종류
+   ===================================================================== */
+const ARENA_THEMES = {
+  1: { name: '고블린 경기장', grass: null, river: null, deco: 'shrooms', edge: '#3d7a34' },
+  2: { name: '해골 구덩이',   grass: '#8a6ab8', ga: .72, river: '#3f8f9a', ra: .55, deco: 'bones', edge: '#3a2a52', dark: .18 },
+  3: { name: '야만인 투기장', grass: '#e2b25a', ga: .78, river: '#5db0c4', ra: .35, deco: 'stakes', edge: '#8a6a34' },
+  4: { name: '장난감 공방',   grass: '#ff8ac8', ga: .55, river: '#4cc8ff', ra: .5, deco: 'blocks', edge: '#d95aa0', checker: ['#ff9ad0', '#8ad8ff'] },
+  5: { name: '마법 계곡',     grass: '#5a3ed8', ga: .6, river: '#d058ff', ra: .72, deco: 'crystals', edge: '#2a1a6a', dark: .12 },
+  6: { name: '건축가 작업장', grass: '#b88a50', ga: .68, river: '#5ab0b0', ra: .3, deco: 'gears', edge: '#6e4a24' },
+  7: { name: '왕실 경기장',   grass: '#46c26a', ga: .35, river: null, deco: 'royal', edge: '#2e7a4a', checker: ['#6fe08a', '#4cc470'] }
+};
 class Renderer {
   constructor(game, canvas) {
     this.g = game; this.cv = canvas; this.c = canvas.getContext('2d');
@@ -1215,7 +1229,7 @@ class Renderer {
   /* ---------- 아레나 ---------- */
   drawBackdrop() {
     const c = this.c, W = CONFIG.W, H = CONFIG.H, T = CONFIG.T;
-    c.fillStyle = '#3d7a34'; c.fillRect(0, 0, W, H);
+    const th0 = ARENA_THEMES[this.g.arenaId || 1]; c.fillStyle = (th0 && th0.edge) || '#3d7a34'; c.fillRect(0, 0, W, H);
     for (let i = 0; i < 15; i++) { const y = 56 + i * 56; for (const x of [14, 526]) {
       const r = 15 + (i % 3) * 3; c.fillStyle = '#2f6a2c'; c.beginPath(); c.arc(x, y, r, 0, 6.3); c.fill(); c.lineWidth = 3; c.strokeStyle = '#14101c'; c.stroke();
       c.fillStyle = '#4fa23e'; c.beginPath(); c.arc(x - 4, y - 5, r * .5, 0, 6.3); c.fill(); } }
@@ -1230,6 +1244,7 @@ class Renderer {
     if (!artOk(ART.bg)) { this.drawArenaCode(); return; }
     const c = this.c, T = CONFIG.T, a = this.g.anim;
     c.drawImage(ART.bg, sx(0), sy(0), 18 * T, 32 * T);
+    this.applyTheme(a);
     c.save(); c.beginPath(); c.rect(sx(0), sy(15.55), 18 * T, sy(16.85) - sy(15.55)); c.clip();
     c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 2; c.lineCap = 'round';
     for (let j = 0; j < 2; j++) for (let i = 0; i < 14; i++) {
@@ -1239,6 +1254,38 @@ class Renderer {
     }
     c.restore();
     c.strokeStyle = '#14101c'; c.lineWidth = 4; c.strokeRect(sx(0), sy(0), 18 * T, 32 * T);
+  }
+  /* ---- 아레나 테마: 잔디/강만 재색칠(다리 영역은 제외), 장식은 잔디 위에 그림 ---- */
+  applyTheme(a) {
+    const g = this.g, id = g.arenaId || 1, th = ARENA_THEMES[id]; if (!th) return;
+    const c = this.c, T = CONFIG.T, bw = 1.6, B = CONFIG.bridges, R = CONFIG.river, X = sx(0), W = 18 * T;
+    const tint = (col, al, x0, y0, x1, y1, mode) => { c.save(); c.beginPath(); c.rect(sx(x0), sy(y0), (x1 - x0) * T, (y1 - y0) * T); c.clip(); c.globalCompositeOperation = mode || 'color'; c.globalAlpha = al; c.fillStyle = col; c.fillRect(X, sy(0), W, 32 * T); c.restore(); };
+    if (th.grass) { tint(th.grass, th.ga, 0, 0, 18, R.top - 0.4); tint(th.grass, th.ga, 0, R.bot + 0.4, 18, 32); if (th.dark) { tint('#000', th.dark, 0, 0, 18, R.top - 0.4, 'source-over'); tint('#000', th.dark, 0, R.bot + 0.4, 18, 32, 'source-over'); } }
+    if (th.checker) {   // 체크무늬 색 강조
+      c.save(); c.globalAlpha = .22;
+      for (let r = 0; r < 32; r++) { if (r >= R.top - 0.5 && r < R.bot + 0.5) continue; for (let q = 0; q < 18; q++) { if (B.some(b => Math.abs(q + .5 - b) < bw && r >= R.top - 1 && r <= R.bot + 1)) continue; c.fillStyle = th.checker[(r + q) % 2]; c.fillRect(sx(q), sy(r), T, T); } }
+      c.restore();
+    }
+    if (th.river) { const segs = [[0, B[0] - bw], [B[0] + bw, B[1] - bw], [B[1] + bw, 18]]; for (const [x0, x1] of segs) tint(th.river, th.ra, x0, R.top, x1, R.bot); }
+    this.drawDeco(th.deco, a);
+  }
+  drawDeco(kind, t) {
+    const c = this.c, T = CONFIG.T;
+    const spots = [[1.0, 12.2, 1], [17.0, 11.4, -1], [1.1, 20.6, 1], [16.9, 21.4, -1], [6.4, 11.6, 1], [11.6, 12.6, -1], [6.6, 21.2, 1], [11.4, 20.4, -1], [9, 9.2, 1], [9, 23.6, -1], [6.8, 8.6, -1], [11.2, 24.2, 1]];
+    spots.forEach((sp, i) => {
+      const x = sx(sp[0]), y = sy(sp[1]), k = sp[2], r = (i * 37 % 10) / 10;
+      c.save(); c.translate(x, y); c.scale(k * 1.5, 1.5); L(c, 2);
+      switch (kind) {
+        case 'shrooms': if (i % 2) { rr(c, -2, -8, 4, 8, 2, '#f4ecd0'); ell(c, 0, -10, 7, 5, '#ff5a4a'); c.fillStyle = '#fff'; c.beginPath(); c.arc(-2, -11, 1.4, 0, 6.3); c.arc(3, -9, 1.2, 0, 6.3); c.fill(); } else { ell(c, 0, -3, 6, 4, '#4fa23e'); ell(c, -2, -5, 3, 2, '#7dd05a'); } break;
+        case 'bones': if (i % 3 === 0) { rr(c, -7, -16, 14, 18, 5, '#8a8a9a'); rr(c, -9, -4, 18, 6, 2, '#6a6a7a'); ln(c, 0, -13, 0, -6, 2, '#4a4a58'); ln(c, -3, -10, 3, -10, 2, '#4a4a58'); } else if (i % 3 === 1) { ell(c, 0, -6, 8, 7, '#efe9d6'); ell(c, -3, -6, 2, 2.4, '#14101c'); ell(c, 3, -6, 2, 2.4, '#14101c'); } else { ln(c, -8, -2, 8, -6, 4, '#efe9d6'); ln(c, -6, -7, 7, 0, 4, '#efe9d6'); } break;
+        case 'stakes': if (i % 2) { rr(c, -2.5, -22, 5, 24, 2, '#8a5a2c'); poly(c, [[-2.5, -22], [0, -28], [2.5, -22]], '#8a5a2c'); } else { rr(c, -9, -8, 18, 9, 4, '#e8c860'); ln(c, -6, -5, 6, -5, 1.5, '#b8902c'); ln(c, -6, -2, 6, -2, 1.5, '#b8902c'); } break;
+        case 'blocks': { const cols = ['#ff5a5a', '#ffd23a', '#4a9aff', '#5adf6a']; rr(c, -7, -14, 14, 14, 3, cols[i % 4]); rr(c, -4, -24 + (i % 3), 8, 9, 2, cols[(i + 1) % 4]); c.fillStyle = 'rgba(255,255,255,.7)'; c.font = '900 9px sans-serif'; c.textAlign = 'center'; c.fillText(['A', 'B', 'C'][i % 3], 0, -5); break; }
+        case 'crystals': { const col = ['#d058ff', '#58d8ff', '#ff8aea'][i % 3], h = 14 + (i % 3) * 7, pulse = .7 + .3 * Math.sin(t * 2.4 + i); c.save(); c.globalAlpha = .35 * pulse; const gg = c.createRadialGradient(0, -h / 2, 1, 0, -h / 2, 22); gg.addColorStop(0, col); gg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = gg; c.fillRect(-24, -h - 20, 48, h + 40); c.restore(); L(c, 2.5); poly(c, [[-6, 0], [-3, -h], [0, -h - 6], [4, -h + 2], [7, 0]], col); poly(c, [[2, 0], [8, -h * .6], [12, 0]], col); c.fillStyle = 'rgba(255,255,255,.7)'; c.fillRect(-1, -h + 2, 2, h * .5); break; }
+        case 'gears': { const rot = (t * 0.6 + i) * (i % 2 ? 1 : -1); c.save(); c.translate(0, -8); c.rotate(rot); ell(c, 0, 0, 9, 9, '#cfd8e6'); c.fillStyle = '#cfd8e6'; for (let q = 0; q < 8; q++) { c.save(); c.rotate(q * Math.PI / 4); rr(c, -2.5, -13, 5, 6, 1, '#cfd8e6'); c.restore(); } ell(c, 0, 0, 3.4, 3.4, '#6c7a92'); c.restore(); break; }
+        case 'royal': if (i % 2) { ln(c, 0, 0, 0, -26, 3, '#6b4423'); poly(c, [[0, -26], [13 + Math.sin(t * 3 + i) * 1.5, -22], [0, -17]], i % 4 === 1 ? '#3b8cff' : '#ffd23a'); } else { ell(c, 0, -2, 7, 4, '#4cc470'); ell(c, -3, -6, 2.6, 2.6, '#fff'); ell(c, 3, -5, 2.6, 2.6, '#ffd23a'); ell(c, 0, -8, 2.6, 2.6, '#ff8aea'); } break;
+      }
+      c.restore();
+    });
   }
   drawArenaCode() {
     const c = this.c, T = CONFIG.T, R = CONFIG.river;
@@ -1562,7 +1609,7 @@ class Renderer {
 class Game {
   constructor(canvas) {
     this.cv = canvas; this.sfx = new Sfx(); this.arena = new Arena(); this.renderer = new Renderer(this, canvas);
-    this.scale = 1; this.anim = 0; this.state = 'idle'; this.diff = 'normal'; this.active = false; this.paused = false; this.opts = {}; this.levels = {}; this.aiLevel = 1; this.towerLv = 1;
+    this.scale = 1; this.anim = 0; this.state = 'idle'; this.diff = 'normal'; this.active = false; this.paused = false; this.opts = {}; this.levels = {}; this.aiLevel = 1; this.towerLv = 1; this.arenaId = 1;
     this.reset(); this.bindInput();
     this.last = performance.now(); requestAnimationFrame(t => this.loop(t));
   }
@@ -1586,7 +1633,7 @@ class Game {
   start(opts) {
     if (typeof opts === 'string') opts = { diff: opts };
     opts = this.opts = Object.assign({ diff: 'normal', deck: CONFIG.deck, levels: {}, aiLevel: 1, towerLv: 1, rules: {}, allowForfeit: true }, opts);
-    this.diff = opts.diff; this.levels = opts.levels; this.aiLevel = opts.aiLevel; this.towerLv = opts.towerLv;
+    this.arenaId = opts.arenaId || 1; this.diff = opts.diff; this.levels = opts.levels; this.aiLevel = opts.aiLevel; this.towerLv = opts.towerLv;
     this.onEnd = opts.onEnd; this.onEvent = opts.onEvent; this.onState = opts.onState;
     this.reset();
     this.ai = opts.noAI ? null : new AIPlayer(this, 1, opts.diff);
@@ -3072,7 +3119,7 @@ const Meta = {
     ctx = ctx || {}; const s = S(), deck = (ctx.deck || s.decks[s.deck]).slice(), levels = {}; CARDS.forEach(id => levels[id] = ctx.tutorial ? 1 : s.cards[id].lv);
     SM.hideAll(); this.showCanvas(true);
     const lvl = ctx.tutorial ? 1 : avgLevel();
-    const opts = Object.assign({ diff: s.set.diff, deck, levels, aiLevel: lvl, towerLv: lvl, rules: ctx.rules || {}, allowForfeit: !ctx.tutorial,
+    const opts = Object.assign({ arenaId: ctx.tutorial ? 1 : trophyArena(s.trophies).id, diff: s.set.diff, deck, levels, aiLevel: lvl, towerLv: lvl, rules: ctx.rules || {}, allowForfeit: !ctx.tutorial,
       onEvent: (t, d) => this.onEvent(t, d, ctx), onState: (n, d) => this.onState(n, d), onEnd: r => this.afterBattle(r, ctx) }, ctx.opts || {});
     game.onMute = () => { S().set.muted = !S().set.muted; Save.save(); this.applyMute(); };
     game.onForfeitRequest = () => { game.paused = true; const m = openModal({ title: '전투 포기', body: h('div', { style: 'text-align:center;font-size:18px;padding:10px 4px;line-height:1.4' }, '포기하면 패배로 처리됩니다.<br>정말 나갈까요?'), buttons: [{ text: '계속 싸우기', cls: 'g' }, { text: '포기', cls: 'r', fn: () => { game.paused = false; game.forfeit(); } }], onClose: () => { game.paused = false; } }); };
